@@ -1,0 +1,42 @@
+name: Process GTFS Data
+
+on:
+  schedule:
+    # הרצה יומית ב-1:00 לפנות בוקר UTC (לשנות לפי הצורך)
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    # מאפשר הפעלה ידנית לצורך בדיקה
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # שלב: הגדרת סביבת Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # שלב: הורדה והתקנת ספריות Python
+      - name: Install dependencies
+        run: |
+          pip install pandas requests
+
+      # שלב: כאן יכנס הסקריפט שלך לעיבוד הנתונים
+      - name: Run processing script
+        run: |
+          echo "Running data processing script..."
+          # בהמשך נחליף את השורה הזו בהפעלת קובץ Python אמיתי
+          python processing_script.py
+
+      # שלב: שמירת הנתונים המעובדים (ה-JSON) לשימוש האתר
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          # כאן נשמור את הקובץ שיצרת (harish_bus20_schedule.json)
+          # git add harish_bus20_schedule.json
+          # git commit -m "Automated GTFS data update"
+          # git push
