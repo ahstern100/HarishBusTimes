@@ -13,30 +13,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # שלב: הגדרת סביבת Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10' # מומלץ להשתמש בגרסה ספציפית
 
-      # שלב: הורדה והתקנת ספריות Python
       - name: Install dependencies
         run: |
+          # התקנת הספריות הנדרשות על ידי הסקריפט
           pip install pandas requests
 
-      # שלב: כאן יכנס הסקריפט שלך לעיבוד הנתונים
+      # שלב: הפעלת סקריפט Python לעיבוד
       - name: Run processing script
-        run: |
-          echo "Running data processing script..."
-          # בהמשך נחליף את השורה הזו בהפעלת קובץ Python אמיתי
-          python processing_script.py
-
-      # שלב: שמירת הנתונים המעובדים (ה-JSON) לשימוש האתר
-      - name: Commit files
+        run: python processing_script.py
+        
+      # שלב: העלאת הקובץ המעובד (JSON) חזרה ל-GitHub
+      - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # כאן נשמור את הקובץ שיצרת (harish_bus20_schedule.json)
-          # git add harish_bus20_schedule.json
-          # git commit -m "Automated GTFS data update"
-          # git push
+          
+          # בדוק אם הקובץ נוצר
+          if [ -f "harish_bus20_schedule.json" ]; then
+            git add harish_bus20_schedule.json
+            git commit -m "Automated GTFS data update: Harish Bus 20 [skip ci]"
+            git push
+          else
+            echo "Error: harish_bus20_schedule.json not found. Aborting commit."
+            exit 1
+          fi
