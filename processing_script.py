@@ -102,7 +102,7 @@ def process_gtfs_data(zf):
     print(f"3. עיבוד הושלם. נמצאו {len(results)} זמני יציאה רלוונטיים היום לקו 20 חריש.")
     return results
 
-# --- פונקציית ריצה ראשית ---
+# --- פונקציית ריצה ראשית (מעודכנת) ---
 if __name__ == "__main__":
     try:
         # 1. הורדה ופתיחה
@@ -118,7 +118,11 @@ if __name__ == "__main__":
         print(f"4. נתונים נשמרו בהצלחה לקובץ: {OUTPUT_FILENAME}")
         
     except Exception as e:
-        print(f"שגיאה קריטית: {e}")
-        # אם משהו נכשל, נשמור קובץ JSON עם הודעת שגיאה
+        # שינוי: מעלים את השגיאה כדי שתופיע ביומן ה-Action ותחזיר exit code שאינו 0
+        print(f"שגיאה קריטית במהלך עיבוד: {e}")
+        # יצירת קובץ שגיאה נקי
         with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
-            json.dump({"error": str(e), "note": "Failed to update schedule data."}, f, ensure_ascii=False, indent=4)
+            json.dump({"error": str(e), "note": "Processing failed. Check log for details."}, f, ensure_ascii=False, indent=4)
+        
+        # *** חשוב: גורם ל-Action להיכשל באופן רשמי ***
+        exit(1)
