@@ -35,12 +35,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # בדוק אם הקובץ נוצר
-          if [ -f "harish_bus20_schedule.json" ]; then
-            git add harish_bus20_schedule.json
-            git commit -m "Automated GTFS data update: Harish Bus 20 [skip ci]"
-            git push
-          else
-            echo "Error: harish_bus20_schedule.json not found. Aborting commit."
-            exit 1
-          fi
+          git add harish_bus20_schedule.json
+          git commit -m "Automated GTFS data update: Harish Bus 20 [skip ci]"
+          git push
