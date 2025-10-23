@@ -1,4 +1,1 @@
-{
-    "error": "HTTPSConnectionPool(host='gtfs.mot.gov.il', port=443): Max retries exceeded with url: /gtfsfiles/israel-public-transportation.zip (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1017)')))",
-    "note": "Failed to update schedule data."
-}
+[]
