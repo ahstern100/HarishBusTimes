@@ -1,3 +1,6 @@
+import urllib3 # הוסף את זה
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning) # הוסף את זה
+
 import pandas as pd
 import requests
 import zipfile
@@ -16,7 +19,7 @@ OUTPUT_FILENAME = "harish_bus20_schedule.json"
 def download_and_extract_gtfs(url):
     """מוריד את קובץ ה-ZIP של ה-GTFS ומחלץ אותו לזיכרון (IO)"""
     print(f"1. מוריד קובץ GTFS מ: {url}")
-    response = requests.get(url, stream=True)
+    response = requests.get(url, stream=True, verify=False)
     response.raise_for_status() # בדיקה אם ההורדה הצליחה
     
     # משתמשים ב-io.BytesIO כדי לעבוד עם הקובץ בזיכרון, ללא שמירה פיזית
