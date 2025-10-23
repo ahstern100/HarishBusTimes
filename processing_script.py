@@ -8,18 +8,22 @@ import io
 import json
 from datetime import datetime
 
-# --- הגדרות קבועות ---
+# --- הגדרות קבועות (מעודכנות לחיפוש מדויק) ---
 GTFS_URL = "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip"
-TARGET_ROUTE_NAME = "20"
-TARGET_CITY_STOP = "חריש" 
+TARGET_ROUTES = ["20", "20א"] # קווים רלוונטיים
 OUTPUT_FILENAME = "harish_bus20_schedule.json"
 
-# --- פונקציות עזר ---
+# רשימה מדויקת של כל התחנות הרלוונטיות בחריש
+TARGET_STOP_NAMES = [
+    "מסוף חריש/איסוף",  # תחנת יציאה אופיינית של 20
+    "קידמה/התמדה",      # תחנת יציאה אופיינית של 20א
+]
+
+# --- פונקציות עזר (ללא שינוי מהותי) ---
 
 def download_and_extract_gtfs(url):
     """מוריד את קובץ ה-ZIP של ה-GTFS ומחלץ אותו לזיכרון (IO)"""
     print(f"1. מוריד קובץ GTFS מ: {url}")
-    # הפתרון לשגיאת SSL
     response = requests.get(url, stream=True, verify=False)
     response.raise_for_status() 
     
@@ -32,77 +36,70 @@ def process_gtfs_data(zf):
     print("2. מתחיל בעיבוד נתונים...")
     
     # 2.1. קריאת קובצי ליבה
-    routes = pd.read_csv(zf.open('routes.txt'), dtype={'route_short_name': str}) # קריאת מספר קו כמחרוזת
+    routes = pd.read_csv(zf.open('routes.txt'), dtype={'route_short_name': str})
     stops = pd.read_csv(zf.open('stops.txt'))
     trips = pd.read_csv(zf.open('trips.txt'))
     stop_times = pd.read_csv(zf.open('stop_times.txt'))
     calendar = pd.read_csv(zf.open('calendar.txt'))
     
-    # 2.2. תיקון: סינון גמיש לקו 20
-    print(f"   מחפש קו {TARGET_ROUTE_NAME}...")
+    # 2.2. סינון קווים 20 ו-20א
+    print(f"   מחפש קווים {TARGET_ROUTES}...")
     target_route = routes[
-        routes['route_short_name'].str.contains(f'^{TARGET_ROUTE_NAME}$', na=False, regex=True)
+        routes['route_short_name'].isin(TARGET_ROUTES)
     ]
-    
-    # אם לא נמצא בדיוק, נחפש עם רווחים
-    if target_route.empty:
-         target_route = routes[
-            routes['route_short_name'].str.contains(f'{TARGET_ROUTE_NAME}', na=False)
-        ]
 
     if target_route.empty:
-        raise ValueError(f"לא נמצא קו בשם: {TARGET_ROUTE_NAME}. ייתכן שמספר הקו השתנה.")
+        print(f"3. עיבוד הושלם. נמצאו 0 זמני יציאה. סיבה: לא נמצאו קווים: {TARGET_ROUTES}")
+        return []
         
-    target_route_id = target_route['route_id'].iloc[0]
+    target_route_ids = target_route['route_id'].unique()
+    target_trips = trips[trips['route_id'].isin(target_route_ids)]
     
-    # 2.3. סינון נסיעות (Trips) של קו 20
-    target_trips = trips[trips['route_id'] == target_route_id]
-    
-    # 2.4. סינון תחנות (Stops) לפי "חריש"
-    print(f"   מחפש תחנות ב-'{TARGET_CITY_STOP}'...")
+    # 2.3. סינון תחנות לפי רשימת השמות המדויקת
+    print(f"   מחפש תחנות לפי שמות מדויקים...")
     harish_stops = stops[
-        stops['stop_name'].str.contains(TARGET_CITY_STOP, na=False)
+        stops['stop_name'].isin(TARGET_STOP_NAMES) # *** שינוי מרכזי כאן! ***
     ]
     harish_stop_ids = harish_stops['stop_id'].unique()
     
     if len(harish_stop_ids) == 0:
-        raise ValueError(f"לא נמצאו תחנות עם השם '{TARGET_CITY_STOP}'. לא ניתן לסנן נסיעות.")
+        print(f"3. עיבוד הושלם. נמצאו 0 זמני יציאה. סיבה: לא נמצאו תחנות תואמות ברשימה המדויקת.")
+        return []
 
-    # 2.5. סינון זמני עצירה (Stop Times) של קו 20, רק בתחנות חריש
+    # 2.4. סינון זמני עצירה של קו 20/20א העוברות בתחנות הנבחרות
     target_trip_ids = target_trips['trip_id'].unique()
     target_stop_times = stop_times[
         (stop_times['trip_id'].isin(target_trip_ids)) &
         (stop_times['stop_id'].isin(harish_stop_ids))
     ]
-    
-    # 2.6. שילוב הנתונים לקבלת תוצאה סופית
-    # כדי לקבל את שם התחנה
+
+    if target_stop_times.empty:
+        print(f"3. עיבוד הושלם. נמצאו 0 זמני יציאה. סיבה: אף קו מ-{TARGET_ROUTES} אינו עוצר בתחנות אלה היום.")
+        return []
+
+    # 2.5. שילוב הנתונים
     merged_data = pd.merge(target_stop_times, target_trips, on='trip_id')
     merged_data = pd.merge(merged_data, stops[['stop_id', 'stop_name']], on='stop_id', how='left')
 
-    # 2.7. סינון לפי יום בשבוע הנוכחי 
+    # 2.6. סינון לפי יום בשבוע הנוכחי
     today_weekday = datetime.now().strftime('%A').lower() 
-    
     day_mapping = {
         'monday': 'monday', 'tuesday': 'tuesday', 'wednesday': 'wednesday',
         'thursday': 'thursday', 'friday': 'friday', 'saturday': 'saturday', 'sunday': 'sunday'
     }
-    
     calendar_today = calendar[calendar[day_mapping[today_weekday]] == 1]
-    
     final_schedule = merged_data[merged_data['service_id'].isin(calendar_today['service_id'])]
     
-    # 2.8. בחירת והצגת עמודות נקיות ומיון
+    # 2.7. בחירת והצגת עמודות נקיות ומיון
     final_schedule = final_schedule[[
-        'departure_time', 'stop_name', 'trip_id', 'stop_sequence', 'direction_id'
-    ]].sort_values(by=['departure_time', 'stop_sequence'])
+        'route_short_name', 'departure_time', 'stop_name', 'direction_id'
+    ]].sort_values(by=['departure_time', 'stop_name'])
     
-    # המרת הפלט לפורמט JSON נקי ונוח
     results = final_schedule.to_dict('records')
-    print(f"3. עיבוד הושלם. נמצאו {len(results)} זמני יציאה רלוונטיים היום לקו 20 חריש.")
+    print(f"3. עיבוד הושלם. נמצאו {len(results)} זמני יציאה רלוונטיים היום לקווים {TARGET_ROUTES}.")
     return results
 
-# --- פונקציית ריצה ראשית (מעודכנת) ---
+# --- פונקציית ריצה ראשית (נשארת ללא שינוי בבלוק ה-if) ---
 if __name__ == "__main__":
     try:
         # 1. הורדה ופתיחה
@@ -118,11 +115,7 @@ if __name__ == "__main__":
         print(f"4. נתונים נשמרו בהצלחה לקובץ: {OUTPUT_FILENAME}")
         
     except Exception as e:
-        # שינוי: מעלים את השגיאה כדי שתופיע ביומן ה-Action ותחזיר exit code שאינו 0
         print(f"שגיאה קריטית במהלך עיבוד: {e}")
-        # יצירת קובץ שגיאה נקי
         with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
             json.dump({"error": str(e), "note": "Processing failed. Check log for details."}, f, ensure_ascii=False, indent=4)
-        
-        # *** חשוב: גורם ל-Action להיכשל באופן רשמי ***
         exit(1)
