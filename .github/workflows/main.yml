@@ -1,8 +1,9 @@
-name: Process GTFS Data
+name: Find Multi-Route Harish Schedule
 
+# טריגרים: הרצה יומית אוטומטית (בשעה 01:00 UTC) והרצה ידנית
 on:
   schedule:
-    # הרצה יומית ב-1:00 לפנות בוקר UTC (לשנות לפי הצורך)
+    # 1:00 AM UTC הוא זמן טוב לאחר עדכון קובץ ה-GTFS של משרד התחבורה
     - cron: '0 1 * * *'
   workflow_dispatch:
     # מאפשר הפעלה ידנית לצורך בדיקה
@@ -10,31 +11,41 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # הגדרת הרשאות כתיבה כדי לאפשר ל-Action לדחוף את קובץ ה-JSON חזרה לריפוזיטורי
     permissions:
-      contents: write
+      contents: write 
+
     steps:
       - uses: actions/checkout@v3
 
+      # הגדרת סביבת Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10' # מומלץ להשתמש בגרסה ספציפית
+          python-version: '3.10' # גרסה יציבה מומלצת
 
+      # התקנת הספריות הנדרשות
       - name: Install dependencies
         run: |
-          # התקנת הספריות הנדרשות על ידי הסקריפט
           pip install pandas requests
 
       # שלב: הפעלת סקריפט Python לעיבוד
       - name: Run processing script
-        run: python processing_script.py
-        
+        # הגדרת הפרמטרים (קווים ותחנות) כמשתני סביבה
+        env:
+          TARGET_ROUTES: "20,20א,22,60,60א,71,71א,632,634,942,160,163,63"
+          TARGET_STOPS: "43898,43899,43897,43334,43496,40662"
+        run: python MultiRouteFinder.py
+
       # שלב: העלאת הקובץ המעובד (JSON) חזרה ל-GitHub
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add harish_bus20_schedule.json
-          git commit -m "Automated GTFS data update: Harish Bus 20 [skip ci]"
+          # דוחף את קובץ הפלט החדש שנוצר על ידי סקריפט הפייתון
+          git add harish_multi_route_schedule.json
+          # || true מאפשר כישלון commit במקרה שאין שינויים בקובץ (ובכך מונע כישלון Build מיותר)
+          git commit -m "Automated Multi-Route Schedule Update [skip ci]" || true 
           git push
