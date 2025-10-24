@@ -156,12 +156,22 @@ def main():
         zip_file_obj = download_and_extract_gtfs(GTFS_URL)
         gtfs_data = load_gtfs_files(zip_file_obj)
         
-        # 2. עיבוד לוגי
-        service_ids = get_today_service_ids(gtfs_data['calendar'])
-        print(f"[CORE] נמצאו {len(service_ids)} Service IDs פעילים היום.")
+        # *** DEBUG: הדפסת שמות התחנות שנטענו ***
+        stops_df = gtfs_data['stops']
+        found_stops = stops_df[stops_df['stop_id'].isin(TARGET_STOPS)]
+        
+        if found_stops.empty:
+             raise ValueError("אף אחד מ-Stop ID שהוזנו לא נמצא בקובץ stops.txt. ודא שה-IDs נכונים.")
+             
+        print(f"[DEBUG] שמות התחנות שנטענו: {found_stops['stop_name'].unique().tolist()}")
+        # *****************************************
+        
+        # 2. עיבוד לוגי - ביטול סינון יום לחלוטין (כדי למצוא את כל התוצאות האפשריות)
+        service_ids = gtfs_data['calendar']['service_id'].unique().tolist()
+        print(f"[CORE] נמצאו {len(service_ids)} ALL Service IDs (DEBUG MODE - ALL DAYS).")
         
         schedule_data = find_departure_schedules(gtfs_data, service_ids)
-        
+
         # 3. שמירת הפלט
         print(f"[OUTPUT] שומר {len(schedule_data)} רשומות לקובץ {OUTPUT_FILENAME}...")
         with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
