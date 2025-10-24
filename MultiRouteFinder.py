@@ -45,14 +45,27 @@ def load_gtfs_files(zf: zipfile.ZipFile) -> Dict[str, pd.DataFrame]:
 
 def get_today_service_ids(calendar: pd.DataFrame) -> List[str]:
     """מוצא את מזהי השירות (Service IDs) שפעילים היום"""
+    
+    # 1. מציאת שם היום באנגלית (לדוגמה: friday)
     today_weekday = datetime.now().strftime('%A').lower() 
+    
+    # 2. מיפוי שם היום לשם השדה ב-GTFS (במקרה זה, זה זהה)
     day_mapping = {
         'monday': 'monday', 'tuesday': 'tuesday', 'wednesday': 'wednesday',
         'thursday': 'thursday', 'friday': 'friday', 'saturday': 'saturday', 'sunday': 'sunday'
     }
     
-    # סינון לפי יום בשבוע
-    calendar_today = calendar[calendar[day_mapping.get(today_weekday, 'monday')] == 1]
+    day_column = day_mapping.get(today_weekday, None)
+    
+    if day_column is None or day_column not in calendar.columns:
+        print(f"[CORE] שגיאה: לא ניתן למפות את היום '{today_weekday}' לעמודת ה-GTFS.")
+        return []
+    
+    print(f"[CORE] מסנן Service IDs עבור היום: {day_column}")
+    
+    # סינון לפי יום בשבוע (שוויון ל-1)
+    calendar_today = calendar[calendar[day_column] == 1]
+    
     return calendar_today['service_id'].unique().tolist()
 
 def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str]) -> List[Dict[str, Any]]:
