@@ -59,7 +59,7 @@ def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: Li
     """מוצא את לוחות הזמנים המבוקשים ומזהה תחנות מוצא"""
     
     routes = gtfs_data['routes']
-    trips = gtaps_data['trips']
+    trips = gtfs_data['trips']
     stop_times = gtfs_data['stop_times']
     stops = gtfs_data['stops']
     
