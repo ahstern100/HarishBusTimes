@@ -78,16 +78,21 @@ def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: Li
     
     final_results = []
     
+
     # 2.1. סינון נסיעות פעילות ורלוונטיות
     print(f"[CORE] 3. מסנן קווים רלוונטיים ({len(TARGET_ROUTES)} קווים)...")
     target_routes_df = routes[routes['route_short_name'].isin(TARGET_ROUTES)]
     target_route_ids = target_routes_df['route_id'].unique().tolist()
     
-    # סינון נסיעות (Trips) של הקווים הנבחרים, שפעילות היום
+    # כל הנסיעות (Trip IDs) של הקווים האלה שפעילות היום
     target_trips = trips[
         (trips['route_id'].isin(target_route_ids)) &
         (trips['service_id'].isin(service_ids))
     ].copy()
+    
+    # *** DEBUG 1: כמה נסיעות פעילות היום? ***
+    print(f"[DEBUG 1] נמצאו {len(target_trips)} נסיעות פעילות היום בקווים הנבחרים.")
+    # *****************************************
     
     if target_trips.empty:
         print("[CORE]   **אזהרה:** לא נמצאו נסיעות פעילות היום עבור הקווים המבוקשים.")
@@ -99,18 +104,26 @@ def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: Li
         stop_times['stop_id'].isin(TARGET_STOPS)
     ].copy()
     
-    # טריקים: מוצאים את כל ה-Trip ID שעוברים בתחנות שלנו
     relevant_trip_ids = relevant_stop_times['trip_id'].unique()
+    
+    # *** DEBUG 2: כמה נסיעות עוברות בתחנות היעד שלך (כל יום)? ***
+    print(f"[DEBUG 2] נמצאו {len(relevant_trip_ids)} נסיעות שעוברות בתחנות היעד (בכל יום).")
+    # *****************************************
     
     # סינון ה-Trips שגם רלוונטיים (היום) וגם עוברים בתחנות שלנו
     final_relevant_trips = target_trips[
         target_trips['trip_id'].isin(relevant_trip_ids)
     ].copy()
     
-    if final_relevant_trips.empty:
-        print("[CORE]   **אזהרה:** אף קו פעיל לא עובר בתחנות היעד היום.")
-        return []
+    # *** DEBUG 3: גודל החיתוך הסופי ***
+    print(f"[DEBUG 3] גודל החיתוך הסופי (נסיעות פעילות שעוברות בתחנות) הוא: {len(final_relevant_trips)}")
+    # **********************************
     
+    if final_relevant_trips.empty:
+        print("[CORE]   **אזהרה:** החיתוך ריק. אין חפיפה בין הקווים הפעילים לתחנות היעד.")
+        return []
+
+
     # 2.3. מציאת תחנת המוצא של כל נסיעה שנמצאה
     print(f"[CORE] 4. מוצא תחנות מוצא עבור {len(final_relevant_trips)} נסיעות רלוונטיות...")
     
