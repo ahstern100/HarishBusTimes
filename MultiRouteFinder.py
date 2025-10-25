@@ -200,7 +200,7 @@ def main():
             final_output = {
                 "update_time": datetime.now().isoformat(),
                 "query_routes": TARGET_ROUTES,
-                "query_stops": TARGET_STOPS,
+                "query_stops": TARGET_STOP_CODES,
                 "results": schedule_data
             }
             json.dump(final_output, f, ensure_ascii=False, indent=4)
