@@ -171,7 +171,7 @@ def main():
     # הדפסת הפרמטרים שנבחרו
     print("-" * 50)
     print(f"[MAIN] קווים נבחרים: {TARGET_ROUTES}")
-    print(f"[MAIN] תחנות יעד (IDs): {TARGET_STOPS}")
+    print(f"[MAIN] תחנות יעד (IDs): {TARGET_STOP_CODES}")
     print("-" * 50)
 
     try:
