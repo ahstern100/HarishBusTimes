@@ -14,11 +14,34 @@ OUTPUT_FILENAME = "harish_multi_route_schedule.json"
 
 # קריאת נתונים ממשתני סביבה או שימוש בערכי ברירת מחדל
 # Note: משתני סביבה יוגדרו בקובץ main.yml
+# שינוי השם ל-TARGET_STOP_CODES
 TARGET_ROUTES_STR = os.environ.get('TARGET_ROUTES', "20,20א,22,60,60א,71,71א,632,634,942,160,163,63")
-TARGET_STOPS_STR = os.environ.get('TARGET_STOPS', "43898,43899,43897,43334,43496,40662")
+TARGET_STOP_CODES_STR = os.environ.get('TARGET_STOPS', "43898,43899,43897,43334,43496,40662") # ה-IDs שאתה סיפקת
 
 TARGET_ROUTES: List[str] = [r.strip() for r in TARGET_ROUTES_STR.split(',')]
-TARGET_STOPS: List[int] = [int(s.strip()) for s in TARGET_STOPS_STR.split(',')]
+TARGET_STOP_CODES: List[str] = [s.strip() for s in TARGET_STOP_CODES_STR.split(',')] # שמירה כמחרוזת
+
+
+def convert_codes_to_ids(stops_df: pd.DataFrame, target_codes: List[str]) -> List[int]:
+    """ממיר את רשימת ה-stop_code שסופקה ל-stop_id התקינים"""
+    print(f"[SETUP] 2.5. ממיר {len(target_codes)} קודי תחנות ל-Stop IDs...")
+    
+    # ודא שהקודים הם מסוג string כי stop_code עשוי להיות מוגדר כזה
+    target_codes_str = [str(c) for c in target_codes]
+    
+    # מסנן את טבלת stops לפי העמודה 'stop_code'
+    found_stops = stops_df[
+        stops_df['stop_code'].astype(str).isin(target_codes_str)
+    ]
+    
+    if found_stops.empty:
+        print(f"[SETUP] **אזהרה:** אף קוד תחנה מ-{target_codes} לא נמצא בעמודת stop_code.")
+        return []
+        
+    print(f"[SETUP] נמצאו {len(found_stops)} התאמות. שמות התחנות: {found_stops['stop_name'].unique().tolist()}")
+    
+    # מחזיר את רשימת ה-stop_id התקינים
+    return found_stops['stop_id'].unique().tolist()
 
 def download_and_extract_gtfs(url: str) -> zipfile.ZipFile:
     """מוריד את קובץ ה-ZIP ומחלץ אותו לזיכרון (עם עקיפת SSL)"""
@@ -70,7 +93,7 @@ def get_today_service_ids(calendar: pd.DataFrame) -> List[str]:
 
 
 
-def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str]) -> List[Dict[str, Any]]:
+def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str], target_stop_ids: List[int]) -> List[Dict[str, Any]]:
     """מוצא את זמני היציאה מתחנות היעד עבור הקווים הפעילים היום"""
     
     routes = gtfs_data['routes']
@@ -100,7 +123,7 @@ def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: Li
     
     # כל זמני העצירה בתחנות היעד שלך
     relevant_stop_times = stop_times[
-        stop_times['stop_id'].isin(TARGET_STOPS) 
+        stop_times['stop_id'].isin(target_stop_ids) 
     ].copy()
     
     # חיתוך (AND) בין הנסיעות הפעילות לזמני העצירה בתחנות היעד
@@ -156,21 +179,19 @@ def main():
         zip_file_obj = download_and_extract_gtfs(GTFS_URL)
         gtfs_data = load_gtfs_files(zip_file_obj)
         
-        # *** DEBUG: הדפסת שמות התחנות שנטענו ***
-        stops_df = gtfs_data['stops']
-        found_stops = stops_df[stops_df['stop_id'].isin(TARGET_STOPS)]
+        # *** המרת קודי תחנות ל-IDs טבלאיים ***
+        target_stop_ids = convert_codes_to_ids(gtfs_data['stops'], TARGET_STOP_CODES)
         
-        if found_stops.empty:
-             raise ValueError("אף אחד מ-Stop ID שהוזנו לא נמצא בקובץ stops.txt. ודא שה-IDs נכונים.")
-             
-        print(f"[DEBUG] שמות התחנות שנטענו: {found_stops['stop_name'].unique().tolist()}")
-        # *****************************************
+        if not target_stop_ids:
+            print("[MAIN] ❌ שגיאה קריטית: לא ניתן להמשיך ללא Stop IDs תקינים.")
+            raise ValueError("Stop Codes לא נמצאו או לא הומרו ל-Stop IDs.")
         
-        # 2. עיבוד לוגי - ביטול סינון יום לחלוטין (כדי למצוא את כל התוצאות האפשריות)
-        service_ids = gtfs_data['calendar']['service_id'].unique().tolist()
-        print(f"[CORE] נמצאו {len(service_ids)} ALL Service IDs (DEBUG MODE - ALL DAYS).")
+        # 2. עיבוד לוגי (מעבירים את ה-IDs התקינים)
+        service_ids = get_today_service_ids(gtfs_data['calendar']) 
+        print(f"[CORE] נמצאו {len(service_ids)} Service IDs פעילים היום.")
         
-        schedule_data = find_departure_schedules(gtfs_data, service_ids)
+        # מעביר את target_stop_ids לפונקציה (נוודא שהיא מקבלת אותו כפרמטר)
+        schedule_data = find_departure_schedules(gtfs_data, service_ids, target_stop_ids)
 
         # 3. שמירת הפלט
         print(f"[OUTPUT] שומר {len(schedule_data)} רשומות לקובץ {OUTPUT_FILENAME}...")
