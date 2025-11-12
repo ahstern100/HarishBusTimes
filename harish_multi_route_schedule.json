@@ -1,5 +1,5 @@
 {
-    "update_time": "2025-11-11T02:29:54.270384",
+    "update_time": "2025-11-12T02:28:47.830584",
     "query_routes": [
         "20",
         "20א",
@@ -6942,6 +6942,13 @@
         },
         {
             "route_short_name": "942",
+            "departure_time": "07:25:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
             "departure_time": "07:26:30",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
@@ -6960,6 +6967,13 @@
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
             "stop_sequence": 11
+        },
+        {
+            "route_short_name": "942",
+            "departure_time": "11:20:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
         },
         {
             "route_short_name": "942",
@@ -6984,6 +6998,13 @@
         },
         {
             "route_short_name": "942",
+            "departure_time": "15:05:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
             "departure_time": "15:06:30",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
@@ -6998,7 +7019,21 @@
         },
         {
             "route_short_name": "942",
+            "departure_time": "16:00:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
             "departure_time": "16:01:30",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
+            "departure_time": "16:55:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
             "stop_sequence": 3
@@ -7019,7 +7054,21 @@
         },
         {
             "route_short_name": "942",
+            "departure_time": "17:55:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
             "departure_time": "17:56:30",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
+        },
+        {
+            "route_short_name": "942",
+            "departure_time": "18:55:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
             "stop_sequence": 3
@@ -7037,6 +7086,13 @@
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 0,
             "stop_sequence": 11
+        },
+        {
+            "route_short_name": "942",
+            "departure_time": "21:30:59",
+            "stop_name": "כביש 6353 מערב/דרך ארץ",
+            "direction_id": 0,
+            "stop_sequence": 3
         },
         {
             "route_short_name": "942",
