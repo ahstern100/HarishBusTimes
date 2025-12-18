@@ -14,53 +14,62 @@ EXTRACT_FOLDER = "extractedGtfs"
 INPUT_VIBE_FILE = "VibeCodeInput.txt"
 
 def get_target_routes_from_file() -> List[str]:
-    """קורא את מספרי הקווים מהעמודה הראשונה בקובץ VibeCodeInput.txt"""
+    """קורא את מספרי הקווים מהקובץ במבנה: מספר קו | מספר תחנה ."""
     routes = []
     if not os.path.exists(INPUT_VIBE_FILE):
-        print(f"[SETUP] אזהרה: הקובץ {INPUT_VIBE_FILE} לא נמצא. משתמש בברירת מחדל.")
-        return ["20", "60", "632"] # ברירת מחדל למקרה חירום
+        print(f"[SETUP] אזהרה: הקובץ {INPUT_VIBE_FILE} לא נמצא.")
+        return []
     
+    print(f"[SETUP] קורא קווים מתוך {INPUT_VIBE_FILE}...")
     with open(INPUT_VIBE_FILE, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if line:
-                # לוקח את החלק הראשון לפני הפסיק או הרווח
-                parts = line.replace(',', ' ').split()
+                # פיצול לפי הקו האנכי (|) ולקיחת החלק הראשון (מספר הקו)
+                parts = line.split('|')
                 if parts:
-                    routes.append(parts[0])
+                    route_num = parts[0].strip()
+                    if route_num:
+                        routes.append(route_num)
     
-    print(f"[SETUP] קווים שחולצו מהקובץ: {routes}")
+    # הסרת כפילויות אם יש
+    routes = list(set(routes))
+    print(f"[SETUP] קווים שזוהו: {routes}")
     return routes
 
 def download_and_extract_gtfs(url: str) -> zipfile.ZipFile:
-    """מוריד את ה-ZIP לזיכרון"""
-    print(f"[SETUP] 1. מוריד קובץ GTFS...")
+    """מוריד את ה-ZIP לזיכרון (עם עקיפת SSL)"""
+    print(f"[SETUP] 1. מוריד קובץ GTFS מהשרת...")
     response = requests.get(url, stream=True, verify=False)
     response.raise_for_status() 
     return zipfile.ZipFile(io.BytesIO(response.content))
 
 def process_and_save_filtered_gtfs(zf: zipfile.ZipFile, target_routes: List[str]):
-    """מחלץ, מסנן ושומר רק מה שרלוונטי כדי לחסוך מקום"""
-    print(f"[SETUP] 2. מעבד ומסנן קבצים לתיקייה {EXTRACT_FOLDER}...")
+    """מחלץ, מסנן ושומר רק מה שרלוונטי לקווים שנבחרו"""
+    print(f"[SETUP] 2. מתחיל סינון ושמירה לתיקייה {EXTRACT_FOLDER}...")
     
     if not os.path.exists(EXTRACT_FOLDER):
         os.makedirs(EXTRACT_FOLDER)
 
-    # 1. טעינת routes וסינון
+    # 1. טעינת routes וסינון לפי הקווים שחולצו מהקובץ
     routes = pd.read_csv(zf.open('routes.txt'), dtype={'route_short_name': str})
     filtered_routes = routes[routes['route_short_name'].isin(target_routes)]
+    
+    if filtered_routes.empty:
+        print(f"[!] אזהרה: לא נמצאו קווים תואמים ב-GTFS עבור הרשימה: {target_routes}")
+    
     filtered_routes.to_csv(os.path.join(EXTRACT_FOLDER, 'routes.txt'), index=False)
     target_route_ids = filtered_routes['route_id'].unique()
 
-    # 2. טעינת trips וסינון לפי ה-routes המסוננים
+    # 2. טעינת trips וסינון
     trips = pd.read_csv(zf.open('trips.txt'))
     filtered_trips = trips[trips['route_id'].isin(target_route_ids)]
     filtered_trips.to_csv(os.path.join(EXTRACT_FOLDER, 'trips.txt'), index=False)
     target_trip_ids = filtered_trips['trip_id'].unique()
 
-    # 3. טעינת stop_times וסינון (זה הקובץ הכבד - כאן הדיאטה הקריטית)
-    print(f"[SETUP] מבצע סינון כבד ל-stop_times.txt...")
-    stop_times_iterator = pd.read_csv(zf.open('stop_times.txt'), chunksize=100000)
+    # 3. טעינת stop_times וסינון (בצ'אנקים כדי לחסוך זיכרון)
+    print(f"[SETUP] מעבד את stop_times.txt (זה עשוי לקחת דקה)...")
+    stop_times_iterator = pd.read_csv(zf.open('stop_times.txt'), chunksize=200000)
     
     first_chunk = True
     for chunk in stop_times_iterator:
@@ -70,13 +79,14 @@ def process_and_save_filtered_gtfs(zf: zipfile.ZipFile, target_routes: List[str]
         filtered_chunk.to_csv(os.path.join(EXTRACT_FOLDER, 'stop_times.txt'), mode=mode, header=header, index=False)
         first_chunk = False
 
-    # 4. שמירת שאר הקבצים כפי שהם (הם קטנים מספיק)
+    # 4. שמירת קבצים קטנים ללא שינוי
     for filename in ['stops.txt', 'calendar.txt']:
         with zf.open(filename) as source, open(os.path.join(EXTRACT_FOLDER, filename), 'wb') as target:
             target.write(source.read())
             
-    print(f"[SETUP] סיום חילוץ וסינון. הקבצים נשמרו ב-{EXTRACT_FOLDER}")
+    print(f"[SETUP] סיום. קבצים נשמרו.")
     
+    # טעינה מחדש לצורך העיבוד של ה-JSON
     return {
         'routes': filtered_routes,
         'trips': filtered_trips,
@@ -91,11 +101,14 @@ def convert_codes_to_ids(stops_df: pd.DataFrame, target_codes: List[str]) -> Lis
     return found_stops['stop_id'].unique().tolist()
 
 def get_today_service_ids(calendar: pd.DataFrame) -> List[str]:
+    # מציאת היום הנוכחי (למשל 'sunday', 'monday'...)
     today_weekday = datetime.now().strftime('%A').lower() 
+    if today_weekday not in calendar.columns:
+        return []
     calendar_today = calendar[calendar[today_weekday] == 1]
     return calendar_today['service_id'].unique().tolist()
 
-def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str], target_stop_ids: List[int], target_routes: List[str]) -> List[Dict[str, Any]]:
+def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str], target_stop_ids: List[int]) -> List[Dict[str, Any]]:
     routes = gtfs_data['routes']
     trips = gtfs_data['trips']
     stop_times = gtfs_data['stop_times']
@@ -123,24 +136,27 @@ def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: Li
     ]].sort_values(by=['departure_time']).to_dict('records')
 
 def main():
-    # 1. קבלת קווים מהקובץ
+    # 1. חילוץ קווים מהקובץ עם המבנה החדש
     target_routes = get_target_routes_from_file()
     
-    # משתני סביבה לתחנות (נשאר כפי שהיה ב-YAML)
+    if not target_routes:
+        print("[MAIN] ❌ לא נמצאו קווים לעיבוד. וודא שקובץ VibeCodeInput.txt תקין.")
+        return
+
+    # משתני סביבה לתחנות (מה-YAML)
     target_stops_str = os.environ.get('TARGET_STOPS', "43898,43899,43897,43334,43496,40662")
     target_stop_codes = [s.strip() for s in target_stops_str.split(',')]
 
     try:
-        # 2. הורדה וסינון
+        # 2. הורדה, סינון ושמירה פיזית
         zip_obj = download_and_extract_gtfs(GTFS_URL)
         gtfs_data = process_and_save_filtered_gtfs(zip_obj, target_routes)
         
-        # 3. עיבוד לוגי ל-JSON
+        # 3. יצירת ה-JSON עבור האפליקציה/אתר
         stop_ids = convert_codes_to_ids(gtfs_data['stops'], target_stop_codes)
         service_ids = get_today_service_ids(gtfs_data['calendar'])
-        schedule_data = find_departure_schedules(gtfs_data, service_ids, stop_ids, target_routes)
+        schedule_data = find_departure_schedules(gtfs_data, service_ids, stop_ids)
 
-        # 4. שמירת JSON
         final_output = {
             "update_time": datetime.now().isoformat(),
             "results": schedule_data
@@ -148,10 +164,10 @@ def main():
         with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
             json.dump(final_output, f, ensure_ascii=False, indent=4)
         
-        print(f"[MAIN] 🌟 סיום מוצלח! הקבצים המסוננים נשמרו ב-{EXTRACT_FOLDER}")
+        print(f"[MAIN] 🌟 הצלחה! הקבצים המסוננים מוכנים בתיקייה {EXTRACT_FOLDER}.")
         
     except Exception as e:
-        print(f"[MAIN] ❌ שגיאה: {e}")
+        print(f"[MAIN] ❌ שגיאה כללית: {e}")
         exit(1)
 
 if __name__ == "__main__":
