@@ -3,16 +3,14 @@ name: Find Multi-Route Harish Schedule
 # טריגרים: הרצה יומית אוטומטית (בשעה 01:00 UTC) והרצה ידנית
 on:
   schedule:
-    # 1:00 AM UTC הוא זמן טוב לאחר עדכון קובץ ה-GTFS של משרד התחבורה
     - cron: '0 1 * * *'
   workflow_dispatch:
-    # מאפשר הפעלה ידנית לצורך בדיקה
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
-    # הגדרת הרשאות כתיבה כדי לאפשר ל-Action לדחוף את קובץ ה-JSON חזרה לריפוזיטורי
+    # הגדרת הרשאות כתיבה כדי לאפשר ל-Action לדחוף קבצים חזרה לריפוזיטורי
     permissions:
       contents: write 
 
@@ -23,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10' # גרסה יציבה מומלצת
+          python-version: '3.10'
 
       # התקנת הספריות הנדרשות
       - name: Install dependencies
@@ -32,20 +30,24 @@ jobs:
 
       # שלב: הפעלת סקריפט Python לעיבוד
       - name: Run processing script
-        # הגדרת הפרמטרים (קווים ותחנות) כמשתני סביבה
         env:
-          TARGET_ROUTES: "20,20א,22,60,60א,71,71א,632,634,942,160,163,63"
+          # רשימת התחנות - נשמר כאן כפרמטר
           TARGET_STOPS: "43898,43899,43897,43334,43496,40662"
         run: python MultiRouteFinder.py
 
-      # שלב: העלאת הקובץ המעובד (JSON) חזרה ל-GitHub
+      # שלב: העלאת הקובץ המעובד (JSON) והקבצים המסוננים (TXT) חזרה ל-GitHub
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # דוחף את קובץ הפלט החדש שנוצר על ידי סקריפט הפייתון
+          # הוספת קובץ הפלט
           git add harish_multi_route_schedule.json
-          # || true מאפשר כישלון commit במקרה שאין שינויים בקובץ (ובכך מונע כישלון Build מיותר)
-          git commit -m "Automated Multi-Route Schedule Update [skip ci]" || true 
+          
+          # הוספת התיקייה עם הקבצים המסוננים (אם קיימים)
+          # ה-|| true מונע שגיאה אם התיקייה ריקה
+          git add extractedGtfs/*.txt || true
+          
+          # ביצוע Commit ו-Push
+          git commit -m "Automated GTFS update and filtering [skip ci]" || true 
           git push
