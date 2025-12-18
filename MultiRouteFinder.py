@@ -7,224 +7,154 @@ import json
 from datetime import datetime
 from typing import List, Dict, Any
 
-# --- 1. מודול Setup וקריאת נתונים ---
-
+# --- הגדרות נתיבים ---
 GTFS_URL = "https://gtfs.mot.gov.il/gtfsfiles/israel-public-transportation.zip"
 OUTPUT_FILENAME = "harish_multi_route_schedule.json"
+EXTRACT_FOLDER = "extractedGtfs"
+INPUT_VIBE_FILE = "VibeCodeInput.txt"
 
-# קריאת נתונים ממשתני סביבה או שימוש בערכי ברירת מחדל
-# Note: משתני סביבה יוגדרו בקובץ main.yml
-# שינוי השם ל-TARGET_STOP_CODES
-TARGET_ROUTES_STR = os.environ.get('TARGET_ROUTES', "20,20א,22,60,60א,71,71א,632,634,942,160,163,63")
-TARGET_STOP_CODES_STR = os.environ.get('TARGET_STOPS', "43898,43899,43897,43334,43496,40662") # ה-IDs שאתה סיפקת
-
-TARGET_ROUTES: List[str] = [r.strip() for r in TARGET_ROUTES_STR.split(',')]
-TARGET_STOP_CODES: List[str] = [s.strip() for s in TARGET_STOP_CODES_STR.split(',')] # שמירה כמחרוזת
-
-
-def convert_codes_to_ids(stops_df: pd.DataFrame, target_codes: List[str]) -> List[int]:
-    """ממיר את רשימת ה-stop_code שסופקה ל-stop_id התקינים"""
-    print(f"[SETUP] 2.5. ממיר {len(target_codes)} קודי תחנות ל-Stop IDs...")
+def get_target_routes_from_file() -> List[str]:
+    """קורא את מספרי הקווים מהעמודה הראשונה בקובץ VibeCodeInput.txt"""
+    routes = []
+    if not os.path.exists(INPUT_VIBE_FILE):
+        print(f"[SETUP] אזהרה: הקובץ {INPUT_VIBE_FILE} לא נמצא. משתמש בברירת מחדל.")
+        return ["20", "60", "632"] # ברירת מחדל למקרה חירום
     
-    # ודא שהקודים הם מסוג string כי stop_code עשוי להיות מוגדר כזה
-    target_codes_str = [str(c) for c in target_codes]
+    with open(INPUT_VIBE_FILE, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                # לוקח את החלק הראשון לפני הפסיק או הרווח
+                parts = line.replace(',', ' ').split()
+                if parts:
+                    routes.append(parts[0])
     
-    # מסנן את טבלת stops לפי העמודה 'stop_code'
-    found_stops = stops_df[
-        stops_df['stop_code'].astype(str).isin(target_codes_str)
-    ]
-    
-    if found_stops.empty:
-        print(f"[SETUP] **אזהרה:** אף קוד תחנה מ-{target_codes} לא נמצא בעמודת stop_code.")
-        return []
-        
-    print(f"[SETUP] נמצאו {len(found_stops)} התאמות. שמות התחנות: {found_stops['stop_name'].unique().tolist()}")
-    
-    # מחזיר את רשימת ה-stop_id התקינים
-    return found_stops['stop_id'].unique().tolist()
+    print(f"[SETUP] קווים שחולצו מהקובץ: {routes}")
+    return routes
 
 def download_and_extract_gtfs(url: str) -> zipfile.ZipFile:
-    """מוריד את קובץ ה-ZIP ומחלץ אותו לזיכרון (עם עקיפת SSL)"""
-    print(f"[SETUP] 1. מוריד קובץ GTFS מ: {url}")
-    # שימוש ב-verify=False כדי לעקוף שגיאות SSL ב-GitHub Actions
+    """מוריד את ה-ZIP לזיכרון"""
+    print(f"[SETUP] 1. מוריד קובץ GTFS...")
     response = requests.get(url, stream=True, verify=False)
     response.raise_for_status() 
-    
-    zip_in_memory = io.BytesIO(response.content)
-    return zipfile.ZipFile(zip_in_memory)
+    return zipfile.ZipFile(io.BytesIO(response.content))
 
-def load_gtfs_files(zf: zipfile.ZipFile) -> Dict[str, pd.DataFrame]:
-    """טוען את קבצי ה-GTFS הרלוונטיים ל-Pandas DataFrames"""
-    print("[SETUP] 2. טוען קבצי GTFS...")
+def process_and_save_filtered_gtfs(zf: zipfile.ZipFile, target_routes: List[str]):
+    """מחלץ, מסנן ושומר רק מה שרלוונטי כדי לחסוך מקום"""
+    print(f"[SETUP] 2. מעבד ומסנן קבצים לתיקייה {EXTRACT_FOLDER}...")
+    
+    if not os.path.exists(EXTRACT_FOLDER):
+        os.makedirs(EXTRACT_FOLDER)
+
+    # 1. טעינת routes וסינון
+    routes = pd.read_csv(zf.open('routes.txt'), dtype={'route_short_name': str})
+    filtered_routes = routes[routes['route_short_name'].isin(target_routes)]
+    filtered_routes.to_csv(os.path.join(EXTRACT_FOLDER, 'routes.txt'), index=False)
+    target_route_ids = filtered_routes['route_id'].unique()
+
+    # 2. טעינת trips וסינון לפי ה-routes המסוננים
+    trips = pd.read_csv(zf.open('trips.txt'))
+    filtered_trips = trips[trips['route_id'].isin(target_route_ids)]
+    filtered_trips.to_csv(os.path.join(EXTRACT_FOLDER, 'trips.txt'), index=False)
+    target_trip_ids = filtered_trips['trip_id'].unique()
+
+    # 3. טעינת stop_times וסינון (זה הקובץ הכבד - כאן הדיאטה הקריטית)
+    print(f"[SETUP] מבצע סינון כבד ל-stop_times.txt...")
+    stop_times_iterator = pd.read_csv(zf.open('stop_times.txt'), chunksize=100000)
+    
+    first_chunk = True
+    for chunk in stop_times_iterator:
+        filtered_chunk = chunk[chunk['trip_id'].isin(target_trip_ids)]
+        mode = 'w' if first_chunk else 'a'
+        header = True if first_chunk else False
+        filtered_chunk.to_csv(os.path.join(EXTRACT_FOLDER, 'stop_times.txt'), mode=mode, header=header, index=False)
+        first_chunk = False
+
+    # 4. שמירת שאר הקבצים כפי שהם (הם קטנים מספיק)
+    for filename in ['stops.txt', 'calendar.txt']:
+        with zf.open(filename) as source, open(os.path.join(EXTRACT_FOLDER, filename), 'wb') as target:
+            target.write(source.read())
+            
+    print(f"[SETUP] סיום חילוץ וסינון. הקבצים נשמרו ב-{EXTRACT_FOLDER}")
+    
     return {
-        'routes': pd.read_csv(zf.open('routes.txt'), dtype={'route_short_name': str}),
-        'stops': pd.read_csv(zf.open('stops.txt')),
-        'trips': pd.read_csv(zf.open('trips.txt')),
-        'stop_times': pd.read_csv(zf.open('stop_times.txt')),
-        'calendar': pd.read_csv(zf.open('calendar.txt'))
+        'routes': filtered_routes,
+        'trips': filtered_trips,
+        'stop_times': pd.read_csv(os.path.join(EXTRACT_FOLDER, 'stop_times.txt')),
+        'stops': pd.read_csv(os.path.join(EXTRACT_FOLDER, 'stops.txt')),
+        'calendar': pd.read_csv(os.path.join(EXTRACT_FOLDER, 'calendar.txt'))
     }
 
-# --- 2. מודול Core Logic ---
+def convert_codes_to_ids(stops_df: pd.DataFrame, target_codes: List[str]) -> List[int]:
+    target_codes_str = [str(c) for c in target_codes]
+    found_stops = stops_df[stops_df['stop_code'].astype(str).isin(target_codes_str)]
+    return found_stops['stop_id'].unique().tolist()
 
 def get_today_service_ids(calendar: pd.DataFrame) -> List[str]:
-    """מוצא את מזהי השירות (Service IDs) שפעילים היום"""
-    
-    # 1. מציאת שם היום באנגלית (לדוגמה: friday)
     today_weekday = datetime.now().strftime('%A').lower() 
-    
-    # 2. מיפוי שם היום לשם השדה ב-GTFS (במקרה זה, זה זהה)
-    day_mapping = {
-        'monday': 'monday', 'tuesday': 'tuesday', 'wednesday': 'wednesday',
-        'thursday': 'thursday', 'friday': 'friday', 'saturday': 'saturday', 'sunday': 'sunday'
-    }
-    
-    day_column = day_mapping.get(today_weekday, None)
-    
-    if day_column is None or day_column not in calendar.columns:
-        print(f"[CORE] שגיאה: לא ניתן למפות את היום '{today_weekday}' לעמודת ה-GTFS.")
-        return []
-    
-    print(f"[CORE] מסנן Service IDs עבור היום: {day_column}")
-    
-    # סינון לפי יום בשבוע (שוויון ל-1)
-    calendar_today = calendar[calendar[day_column] == 1]
-    
+    calendar_today = calendar[calendar[today_weekday] == 1]
     return calendar_today['service_id'].unique().tolist()
 
-
-
-def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str], target_stop_ids: List[int]) -> List[Dict[str, Any]]:
-    """מוצא את זמני היציאה מתחנות היעד עבור הקווים הפעילים היום"""
-    
+def find_departure_schedules(gtfs_data: Dict[str, pd.DataFrame], service_ids: List[str], target_stop_ids: List[int], target_routes: List[str]) -> List[Dict[str, Any]]:
     routes = gtfs_data['routes']
     trips = gtfs_data['trips']
     stop_times = gtfs_data['stop_times']
     stops = gtfs_data['stops']
     
-    # 2.1. סינון נסיעות פעילות ורלוונטיות
-    print(f"[CORE] 3. מסנן קווים רלוונטיים ({len(TARGET_ROUTES)} קווים)...")
-    target_routes_df = routes[routes['route_short_name'].isin(TARGET_ROUTES)]
-    target_route_ids = target_routes_df['route_id'].unique().tolist()
-    
-    # סינון נסיעות (Trips) של הקווים הנבחרים, שפעילות היום
     target_trips = trips[
-        (trips['route_id'].isin(target_route_ids)) &
+        (trips['route_id'].isin(routes['route_id'])) &
         (trips['service_id'].isin(service_ids))
     ].copy()
     
-    if target_trips.empty:
-        print("[CORE]   **אזהרה:** לא נמצאו נסיעות פעילות היום עבור הקווים המבוקשים.")
-        return []
-
-    # 2.2. מציאת זמני יציאה בתחנות היעד
-    print(f"[CORE] 4. מוצא זמני יציאה מתחנות היעד...")
-    
-    # *** התיקון העיקרי: מיזוג ישיר בין הנסיעות הפעילות לזמני העצירה בתחנות היעד ***
-    
-    # כל זמני העצירה בתחנות היעד שלך
-    relevant_stop_times = stop_times[
-        stop_times['stop_id'].isin(target_stop_ids) 
-    ].copy()
-    
-    # חיתוך (AND) בין הנסיעות הפעילות לזמני העצירה בתחנות היעד
-    final_relevant_stop_times = relevant_stop_times[
-        relevant_stop_times['trip_id'].isin(target_trips['trip_id'])
-    ].copy()
+    relevant_stop_times = stop_times[stop_times['stop_id'].isin(target_stop_ids)].copy()
+    final_relevant_stop_times = relevant_stop_times[relevant_stop_times['trip_id'].isin(target_trips['trip_id'])]
     
     if final_relevant_stop_times.empty:
-        # הודעה זו היא המדויקת ביותר למצב הנוכחי:
-        print("[CORE]   **אזהרה:** אף נסיעה פעילה היום (יום שישי) אינה עוצרת בתחנות היעד שצוינו.")
         return []
     
-    # 2.3. איחוד הנתונים וסינון כפילויות
-    
-    # מיזוג עם פרטי הנסיעה והקו
     merged_data = pd.merge(final_relevant_stop_times, target_trips, on='trip_id')
     merged_data = pd.merge(merged_data, routes[['route_id', 'route_short_name']], on='route_id')
     merged_data = pd.merge(merged_data, stops[['stop_id', 'stop_name']], on='stop_id', how='left')
 
-    # סינון כפילויות: אם אותו קו יוצא באותה שעה מאותה תחנה
-    unique_departures = merged_data.drop_duplicates(
-        subset=['route_short_name', 'departure_time', 'stop_id'], 
-        keep='first'
-    )
+    unique_departures = merged_data.drop_duplicates(subset=['route_short_name', 'departure_time', 'stop_id'])
     
-    # 2.4. יצירת הפלט הסופי
-    print(f"[CORE] 5. נמצאו {len(unique_departures)} יציאות ייחודיות.")
-    
-    # סידור הנתונים
-    unique_departures = unique_departures[[
-        'route_short_name', 
-        'departure_time', 
-        'stop_name', 
-        'direction_id',
-        'stop_sequence'
-    ]].sort_values(by=['route_short_name', 'departure_time'])
-    
-    return unique_departures.to_dict('records')
-
-
-# --- 3. מודול Output ופונקציה ראשית ---
+    return unique_departures[[
+        'route_short_name', 'departure_time', 'stop_name', 'direction_id'
+    ]].sort_values(by=['departure_time']).to_dict('records')
 
 def main():
-    """פונקציה ראשית שמנהלת את התהליך כולו"""
-    # הדפסת הפרמטרים שנבחרו
-    print("-" * 50)
-    print(f"[MAIN] קווים נבחרים: {TARGET_ROUTES}")
-    print(f"[MAIN] תחנות יעד (IDs): {TARGET_STOP_CODES}")
-    print("-" * 50)
+    # 1. קבלת קווים מהקובץ
+    target_routes = get_target_routes_from_file()
+    
+    # משתני סביבה לתחנות (נשאר כפי שהיה ב-YAML)
+    target_stops_str = os.environ.get('TARGET_STOPS', "43898,43899,43897,43334,43496,40662")
+    target_stop_codes = [s.strip() for s in target_stops_str.split(',')]
 
     try:
-        # 1. טעינת נתונים
-        zip_file_obj = download_and_extract_gtfs(GTFS_URL)
-        gtfs_data = load_gtfs_files(zip_file_obj)
+        # 2. הורדה וסינון
+        zip_obj = download_and_extract_gtfs(GTFS_URL)
+        gtfs_data = process_and_save_filtered_gtfs(zip_obj, target_routes)
         
-        # *** המרת קודי תחנות ל-IDs טבלאיים ***
-        target_stop_ids = convert_codes_to_ids(gtfs_data['stops'], TARGET_STOP_CODES)
-        
-        if not target_stop_ids:
-            print("[MAIN] ❌ שגיאה קריטית: לא ניתן להמשיך ללא Stop IDs תקינים.")
-            raise ValueError("Stop Codes לא נמצאו או לא הומרו ל-Stop IDs.")
-        
-        # 2. עיבוד לוגי (מעבירים את ה-IDs התקינים)
-        service_ids = get_today_service_ids(gtfs_data['calendar']) 
-        print(f"[CORE] נמצאו {len(service_ids)} Service IDs פעילים היום.")
-        
-        # מעביר את target_stop_ids לפונקציה (נוודא שהיא מקבלת אותו כפרמטר)
-        schedule_data = find_departure_schedules(gtfs_data, service_ids, target_stop_ids)
+        # 3. עיבוד לוגי ל-JSON
+        stop_ids = convert_codes_to_ids(gtfs_data['stops'], target_stop_codes)
+        service_ids = get_today_service_ids(gtfs_data['calendar'])
+        schedule_data = find_departure_schedules(gtfs_data, service_ids, stop_ids, target_routes)
 
-        # 3. שמירת הפלט
-        print(f"[OUTPUT] שומר {len(schedule_data)} רשומות לקובץ {OUTPUT_FILENAME}...")
-        with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
-            # הוספת כותרת ל-JSON
-            final_output = {
-                "update_time": datetime.now().isoformat(),
-                "query_routes": TARGET_ROUTES,
-                "query_stops": TARGET_STOP_CODES,
-                "results": schedule_data
-            }
-            json.dump(final_output, f, ensure_ascii=False, indent=4)
-        
-        print(f"[MAIN] 🌟 סיום מוצלח! נתונים נשמרו בהצלחה.")
-        
-    except Exception as e:
-        print(f"[MAIN] ❌ שגיאה קריטית: {e}")
-        # שמירת קובץ שגיאה גם במקרה של כשל
-        error_output = {
+        # 4. שמירת JSON
+        final_output = {
             "update_time": datetime.now().isoformat(),
-            "error": str(e),
-            "note": "Processing failed. Check GitHub Actions log for full traceback."
+            "results": schedule_data
         }
         with open(OUTPUT_FILENAME, 'w', encoding='utf-8') as f:
-            json.dump(error_output, f, ensure_ascii=False, indent=4)
+            json.dump(final_output, f, ensure_ascii=False, indent=4)
+        
+        print(f"[MAIN] 🌟 סיום מוצלח! הקבצים המסוננים נשמרו ב-{EXTRACT_FOLDER}")
+        
+    except Exception as e:
+        print(f"[MAIN] ❌ שגיאה: {e}")
         exit(1)
 
 if __name__ == "__main__":
-    # השתקת אזהרות SSL אם קיימות (רלוונטי לסביבת לינוקס)
-    try:
-        import urllib3 
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    except:
-        pass # התעלמות אם הספרייה לא קיימת
-        
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     main()
