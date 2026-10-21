@@ -1,28 +1,10 @@
 {
-    "update_time": "2026-10-20T05:36:34.763087",
+    "update_time": "2026-10-21T05:37:38.114692",
     "results": [
-        {
-            "route_short_name": "71",
-            "departure_time": "05:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
         {
             "route_short_name": "71",
             "departure_time": "05:19:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "05:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "05:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -40,12 +22,6 @@
         {
             "route_short_name": "71",
             "departure_time": "05:34:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "05:44:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -74,12 +50,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "05:57:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "05:57:35",
             "stop_name": "מסוף חריש/גפן",
@@ -87,12 +57,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "05:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "05:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -112,12 +76,6 @@
         {
             "route_short_name": "71",
             "departure_time": "06:04:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "06:14:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -146,12 +104,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "06:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "06:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -159,12 +111,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "06:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "06:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -190,18 +136,6 @@
         {
             "route_short_name": "71",
             "departure_time": "06:39:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "06:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "06:44:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -237,30 +171,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "06:57:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "06:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "06:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "06:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "07:04:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
@@ -285,12 +195,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "07:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "07:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -308,12 +212,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "07:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "07:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -321,12 +219,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "07:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "07:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -357,12 +249,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "07:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "07:47:35",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -386,19 +272,7 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "07:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
-            "departure_time": "07:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "07:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -429,12 +303,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "08:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "08:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -452,21 +320,9 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "08:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "08:27:35",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "08:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -491,12 +347,6 @@
             "route_short_name": "71",
             "departure_time": "08:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "08:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -527,18 +377,6 @@
             "route_short_name": "71",
             "departure_time": "08:57:33",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "08:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "08:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -573,12 +411,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "09:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "09:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -596,12 +428,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "09:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "09:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -609,12 +435,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "09:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "09:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -635,12 +455,6 @@
             "route_short_name": "71",
             "departure_time": "09:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "09:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -668,27 +482,9 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "09:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "09:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
             "departure_time": "09:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "10:04:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -698,14 +494,8 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "10:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
-            "departure_time": "10:14:56",
+            "departure_time": "10:04:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -722,13 +512,13 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
+            "route_short_name": "71",
             "departure_time": "10:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
+            "route_short_name": "60",
             "departure_time": "10:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -737,30 +527,6 @@
             "route_short_name": "71",
             "departure_time": "10:24:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "10:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "10:27:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "10:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "10:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -789,12 +555,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "10:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "10:47:35",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -812,19 +572,7 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "10:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
-            "departure_time": "10:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "10:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -838,18 +586,6 @@
         {
             "route_short_name": "60",
             "departure_time": "11:04:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "11:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "11:14:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -866,13 +602,13 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
+            "route_short_name": "60",
             "departure_time": "11:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
+            "route_short_name": "71",
             "departure_time": "11:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -881,30 +617,6 @@
             "route_short_name": "71",
             "departure_time": "11:24:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "11:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "11:27:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "11:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "11:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -933,12 +645,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "11:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "11:47:35",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -956,27 +662,9 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "11:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "11:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
             "departure_time": "11:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:04:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -987,13 +675,7 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "12:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "12:14:56",
+            "departure_time": "12:04:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -1010,13 +692,13 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
+            "route_short_name": "60",
             "departure_time": "12:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
+            "route_short_name": "71",
             "departure_time": "12:18:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -1025,30 +707,6 @@
             "route_short_name": "71",
             "departure_time": "12:24:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "12:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:27:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "12:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1067,12 +725,6 @@
             "route_short_name": "71",
             "departure_time": "12:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -1103,18 +755,6 @@
             "route_short_name": "71",
             "departure_time": "12:57:33",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "12:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1149,12 +789,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "13:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "13:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1172,21 +806,9 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "13:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "13:27:35",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "13:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1221,12 +843,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "13:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "13:47:35",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1250,19 +866,7 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "13:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
-            "departure_time": "13:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
             "departure_time": "13:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -1293,12 +897,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "14:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "14:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1316,21 +914,9 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "14:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "14:27:35",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "14:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1355,12 +941,6 @@
             "route_short_name": "71",
             "departure_time": "14:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "14:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -1391,18 +971,6 @@
             "route_short_name": "71",
             "departure_time": "14:57:33",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "14:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "14:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1437,12 +1005,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "15:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "15:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1460,12 +1022,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "15:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "15:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -1473,12 +1029,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "15:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "15:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -1499,12 +1049,6 @@
             "route_short_name": "71",
             "departure_time": "15:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "15:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -1538,18 +1082,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "60",
-            "departure_time": "15:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "15:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "71",
             "departure_time": "15:58:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
@@ -1571,12 +1103,6 @@
             "route_short_name": "60",
             "departure_time": "16:08:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "16:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -1604,12 +1130,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "16:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "16:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -1617,12 +1137,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "16:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "16:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -1643,12 +1157,6 @@
             "route_short_name": "71",
             "departure_time": "16:38:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "16:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
         {
@@ -1679,18 +1187,6 @@
             "route_short_name": "71",
             "departure_time": "16:57:33",
             "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "16:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "16:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
@@ -1725,12 +1221,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "17:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "17:17:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1748,12 +1238,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "17:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "17:27:35",
             "stop_name": "מסוף חריש/גפן",
@@ -1761,12 +1245,6 @@
         },
         {
             "route_short_name": "60",
-            "departure_time": "17:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "17:28:59",
             "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
@@ -1790,18 +1268,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "17:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "17:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "17:47:35",
             "stop_name": "מסוף חריש/גפן",
@@ -1821,30 +1287,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "17:57:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "17:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "17:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "17:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "18:02:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1858,18 +1300,6 @@
         {
             "route_short_name": "60",
             "departure_time": "18:04:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "18:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:14:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -1893,30 +1323,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "18:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:27:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "18:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "18:32:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -1930,18 +1336,6 @@
         {
             "route_short_name": "60",
             "departure_time": "18:34:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "18:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:44:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -1965,30 +1359,6 @@
         },
         {
             "route_short_name": "71",
-            "departure_time": "18:57:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "18:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "18:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
             "departure_time": "19:02:33",
             "stop_name": "מסוף חריש/גפן",
             "direction_id": 1
@@ -2006,18 +1376,6 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "19:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:14:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "19:17:35",
             "stop_name": "מסוף חריש/גפן",
@@ -2030,44 +1388,8 @@
             "direction_id": 1
         },
         {
-            "route_short_name": "71",
-            "departure_time": "19:27:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:27:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "19:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:28:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
             "route_short_name": "60",
             "departure_time": "19:34:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:44:56",
-            "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "19:44:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
             "direction_id": 1
         },
@@ -2087,30 +1409,6 @@
             "route_short_name": "71",
             "departure_time": "19:49:56",
             "stop_name": "שדרות דרך ארץ/תנופה",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "19:57:33",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:57:35",
-            "stop_name": "מסוף חריש/גפן",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "71",
-            "departure_time": "19:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
-            "direction_id": 1
-        },
-        {
-            "route_short_name": "60",
-            "departure_time": "19:58:59",
-            "stop_name": "כביש 6353 מערב/דרך ארץ",
             "direction_id": 1
         },
         {
